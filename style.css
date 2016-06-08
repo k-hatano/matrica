@@ -1,67 +1,67 @@
-body{
-	text-align:center;
+body {
+    text-align: center;
 }
-.gray{
-	color: gray;
+.gray {
+    color: gray;
 }
-.matrica_table{
-	text-align:center;
+.matrica_table {
+    text-align: center;
 }
-#formulas{
-	overflow-x:scroll;
-	overflow-y:scroll;
-	width:400px;
-	height:400px;
+#formulas {
+    overflow-x: scroll;
+    overflow-y: scroll;
+    width: 400px;
+    height: 400px;
 }
-#temp{
-	color:gray;
+#temp {
+    color: gray;
 }
-.formula_cell{
-	text-align:left;
-	vertical-align:top;
-	font-family:serif;
+.formula_cell {
+    text-align: left;
+    vertical-align: top;
+    font-family: serif;
 }
-.formula_cell td{
-	text-align:center;
+.formula_cell td {
+    text-align: center;
 }
-.paren{
-	font-size:200%;
+.paren {
+    font-size: 200%;
 }
-.paren3{
-	font-size:300%;
+.paren3 {
+    font-size: 300%;
 }
-#graph{
-	width:400px;
-	height:400px;
+#graph {
+    width: 400px;
+    height: 400px;
 }
-.graph_cell{
-	padding:0px;
+.graph_cell {
+    padding: 0px;
 }
-.message{
-	color:black;
-	font-size:small;
+.message {
+    color: black;
+    font-size: small;
 }
-.caution{
-	color:red;
-	font-size:small;
+.caution {
+    color: red;
+    font-size: small;
 }
-.selection{
-	background-color:#EEEEFF;
+.selection {
+    background-color: #EEEEFF;
 }
-.deleteButton{
-	vertical-align:center;
-	display: none;
+.deleteButton {
+    vertical-align: center;
+    display: none;
 }
-.selection .deleteButton{
-	vertical-align:center;
-	display: block;
+.selection .deleteButton {
+    vertical-align: center;
+    display: block;
 }
-.deleted{
-	display: none;
+.deleted {
+    display: none;
 }
-canvas.mobile{
-	-webkit-tap-highlight-color:rgba(0,0,0,0);
+canvas.mobile {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
-.explanation{
-	width=600px;
+.explanation {
+    width=600px;
 }

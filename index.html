@@ -1,70 +1,83 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html	PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+
 <head>
-	<link rel="stylesheet" type="text/css" media="screen" href="style.css" />
-	<title>Matrica - マトリカ</title>
-	<script type="text/javascript" src="script.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
+    <title>Matrica - マトリカ</title>
+    <script type="text/javascript" src="script.js"></script>
 </head>
+
 <body>
-	<center>
-		<br />
-		<h1>Matrica - マトリカ</h1>
-		<br />
-		<table class="matrica_table" border="1">
-			<tr>
-				<td id="formula_cell" class="formula_cell" onclick="matrixClicked(-1);">
-					<div id="formulas"><div id="defined"></div><div id="temp"></div></div>
-				</td>
-				<td class="graph_cell">
-					<canvas id="graph" width="400px" height="400px" oncontextmenu="return false;" />
-				</td>
-			</tr>
-			<tr>
-				<td class="input_cell" colspan="2">
-					<form action="javascript:void(0);" onsubmit="inputFormula();">
-						<input type="text" id="input" size="80" onfocus="textFocus();" />
-						<input type="submit" value="入力" />
-						<input type="button" value="+" onclick="zoomIn();" onmouseout="drawGraph();" />
-						<input type="button" value="-" onclick="zoomOut();" onmouseout="drawGraph();" />
-					</form>
-					<span id="message" class="message"></span><span id="caution" class="caution"></span>
-				</td>
-			</tr>
-		</table>
-		<br />
-		<input id="vector" type="checkbox" onchange="drawGraph();" /><label for="vector">列ベクトルを矢印で表示</label>
-		<input id="square" type="checkbox" onchange="drawGraph();" /><label for="square">正方行列を矢印で表示</label>
-		<br />
-		<br />
-		<table width="600px" border="1">
-			<tr>
-				<td class="explanation">
-					<h4>入力可能な式</h4>
-					<ul>
-						<p>
-							<li><strong>行列定義</strong>&nbsp;&nbsp;&nbsp;&nbsp;<span class="gray">例: M=(1,-2,0.5,1) p=(1,2) n=2</span></li>
-						</p>
-						<p>
-							<li><strong>行列のべき乗・逆行列</strong>&nbsp;&nbsp;&nbsp;&nbsp;<span class="gray">例: P=M^2 Q=M^3 I=M^-1</span></li>
-						</p>
-						<p>
-							<li><strong>行列の和・差・積</strong>&nbsp;&nbsp;&nbsp;&nbsp;<span class="gray">例: A=M+P S=M-I T=PI q=Mp</span></li>
-						</p>
-						<p>
-							<li><strong>行列のスカラー倍</strong>&nbsp;&nbsp;&nbsp;&nbsp;<span class="gray">例: B=2A r=np</span></li>
-						</p>
-						<p>
-							<li><strong>行列式</strong>&nbsp;&nbsp;&nbsp;&nbsp;<span class="gray">例: d=det(M)</span></li>
-						</p>
-					</ul>
-					<p>右辺のみを入力した場合は一時的な計算結果として表示されます。</p>
-				</td>
-			</tr>
-		</table>
-		<br />
-		<br />
-	</center>
+    <center>
+        <br />
+        <h1>Matrica - マトリカ</h1>
+        <br />
+        <table class="matrica_table" border="1">
+            <tr>
+                <td id="formula_cell" class="formula_cell" onclick="matrixClicked(-1);">
+                    <div id="formulas">
+                        <div id="defined"></div>
+                        <div id="temp"></div>
+                    </div>
+                </td>
+                <td class="graph_cell">
+                    <canvas id="graph" width="400px" height="400px" oncontextmenu="return false;" />
+                </td>
+            </tr>
+            <tr>
+                <td class="input_cell" colspan="2">
+                    <form action="javascript:void(0);" onsubmit="inputFormula();">
+                        <input type="text" id="input" size="80" onfocus="textFocus();" />
+                        <input type="submit" value="入力" />
+                        <input type="button" value="+" onclick="zoomIn();" onmouseout="drawGraph();" />
+                        <input type="button" value="-" onclick="zoomOut();" onmouseout="drawGraph();" />
+                    </form>
+                    <span id="message" class="message"></span><span id="caution" class="caution"></span>
+                </td>
+            </tr>
+        </table>
+        <br />
+        <input id="vector" type="checkbox" onchange="drawGraph();" />
+        <label for="vector">列ベクトルを矢印で表示</label>
+        <input id="square" type="checkbox" onchange="drawGraph();" />
+        <label for="square">正方行列を矢印で表示</label>
+        <br />
+        <br />
+        <table width="600px" border="1">
+            <tr>
+                <td class="explanation">
+                    <h4>入力可能な式</h4>
+                    <ul>
+                        <p>
+                            <li><strong>行列定義</strong>&nbsp;&nbsp;&nbsp;&nbsp;<span class="gray">例: M=(1,-2,0.5,1) p=(1,2) n=2</span>
+                            </li>
+                        </p>
+                        <p>
+                            <li><strong>行列のべき乗・逆行列</strong>&nbsp;&nbsp;&nbsp;&nbsp;<span class="gray">例: P=M^2 Q=M^3 I=M^-1</span>
+                            </li>
+                        </p>
+                        <p>
+                            <li><strong>行列の和・差・積</strong>&nbsp;&nbsp;&nbsp;&nbsp;<span class="gray">例: A=M+P S=M-I T=PI q=Mp</span>
+                            </li>
+                        </p>
+                        <p>
+                            <li><strong>行列のスカラー倍</strong>&nbsp;&nbsp;&nbsp;&nbsp;<span class="gray">例: B=2A r=np</span>
+                            </li>
+                        </p>
+                        <p>
+                            <li><strong>行列式</strong>&nbsp;&nbsp;&nbsp;&nbsp;<span class="gray">例: d=det(M)</span>
+                            </li>
+                        </p>
+                    </ul>
+                    <p>右辺のみを入力した場合は一時的な計算結果として表示されます。</p>
+                </td>
+            </tr>
+        </table>
+        <br />
+        <br />
+    </center>
 </body>
+
 </html>
