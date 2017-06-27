@@ -23,12 +23,15 @@
                     </div>
                 </td>
                 <td class="graph_cell">
-                    <canvas id="graph" width="400px" height="400px" oncontextmenu="return false;" />
+                    <canvas id="graph" width="500px" height="500px" oncontextmenu="return false;" />
                 </td>
             </tr>
             <tr>
                 <td class="input_cell" colspan="2">
                     <form action="javascript:void(0);" onsubmit="inputFormula();">
+                        <input type="button" value="行列式" onclick="inputDeterminant();" />
+                        <input type="button" value="逆行列" onclick="inputInversedMatrix();" />
+                        <br />
                         <input type="text" id="input" size="80" onfocus="textFocus();" />
                         <input type="submit" value="入力" />
                         <input type="button" value="+" onclick="zoomIn();" onmouseout="drawGraph();" />

@@ -22,7 +22,7 @@ onload = function() {
     defined = {};
 
     max = 10;
-    cnvSize = 400;
+    cnvSize = 500;
     dist - 1;
     selection = -1;
     lastClicked = 0;
@@ -77,6 +77,25 @@ function getMatrixFromArray(str) {
         if (arr.length == 1) return res;
         if (arr.length % 2 == 0) return res;
         if (arr.length == 3 || arr.length == 9) return res;
+        return undefined;
+    } else if (str.match(/^\(([0-9\-\;\.]*)\)$/)) {
+        // セミコロン区切りの場合は行ベクトル単位で入力
+        var res = RegExp.$1;
+        var tmpArr = res.split(";");
+        var arr = new Array();
+        if (tmpArr.length == 1) return tmpArr;
+        if (tmpArr.length % 2 == 0) {
+            for (var i = 0; i < tmpArr.length; i++) {
+                arr[i] = tmpArr[(i % 2) * (tmpArr.length / 2) + (Math.floor(i / 2)) ];
+            }
+            return arr.join(",");
+        }
+        if (tmpArr.length % 3 == 0) {
+            for (var i = 0; i < tmpArr.length; i++) {
+                arr[i] = tmpArr[(i % 3) * (tmpArr.length / 3) + (Math.floor(i / 3)) ];
+            }
+            return arr.join(",");
+        }
         return undefined;
     } else if (str.match(/^([A-Za-z])$/)) {
         var a = RegExp.$1;
@@ -1086,6 +1105,26 @@ function deleteMatrix(idno) {
     }
     point[idno] = "";
     drawGraph();
+}
+
+function inputDeterminant() {
+    if (selection < 0) {
+        showCaution("行列が選択されていません");
+        return;
+    }
+    var formula = document.getElementById("formula_" + selection);
+    var matrixName = formula.innerText.charAt(0);
+    executeFormula( "det(" + matrixName + ")" );
+}
+
+function inputInversedMatrix() {
+    if (selection < 0) {
+        showCaution("行列が選択されていません");
+        return;
+    }
+    var formula = document.getElementById("formula_" + selection);
+    var matrixName = formula.innerText.charAt(0);
+    executeFormula( matrixName + "^-1" );
 }
 
 function zoomIn() {

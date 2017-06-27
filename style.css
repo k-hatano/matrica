@@ -11,7 +11,7 @@ body {
     overflow-x: scroll;
     overflow-y: scroll;
     width: 400px;
-    height: 400px;
+    height: 500px;
 }
 #temp {
     color: gray;
@@ -31,8 +31,8 @@ body {
     font-size: 300%;
 }
 #graph {
-    width: 400px;
-    height: 400px;
+    width: 500px;
+    height: 500px;
 }
 .graph_cell {
     padding: 0px;
