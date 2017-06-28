@@ -67,6 +67,20 @@ function getMatrixFromArray(str) {
         // スカラー 例: 12.34
         var res = RegExp.$1;
         return res;
+    } else if (str.match(/^\((\-?[0-9]+\.?[0-9]*)\+([0-9]+\.?[0-9]*)([ij])\)?$/)) {
+        // 複素数の行列表現(強引)
+        var re = parseFloat(RegExp.$1);
+        var im = parseFloat(RegExp.$2);
+        var res = "" + re + "," + im + "," + (-im) + "," + re;
+        mess = "(" + re + "+" + im + RegExp.$3 + ")";
+        return res;
+    } else if (str.match(/^\((\-?[0-9]+\.?[0-9]*)\-([0-9]+\.?[0-9]*)[ij]\)?$/)) {
+        // 複素数の行列表現(強引)
+        var re = parseFloat(RegExp.$1);
+        var im = parseFloat(RegExp.$2);
+        var res = "" + re + "," + -im + "," + (im) + "," + re;
+        mess = "(" + re + "-" + im + RegExp.$3 + ")";
+        return res;
     } else if (str.match(/^\((\-?[0-9]+\.?[0-9]*)\,(\-?[0-9]+\.?[0-9]*)\)?$/)) {
         // ベクトル 例: (1,-2,0.5,1)
         var res = RegExp.$1 + "," + RegExp.$2;
