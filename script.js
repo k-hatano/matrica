@@ -2,6 +2,7 @@
 // ﾅ=(-1,1,-3,1,-3,-1,-1,-1,-1,-3,-2,-5,0,-5,1,-3,1,-1,3,-1,3,1,1,1,1,3,-1,3)
 // ←=(1,4,1,1,-1,-1,-3,-1,-3,1,-6,-2,-3,-5,-3,-3,0,-3,3,0,3,4)
 // ｲ=(5,5,-5,0,-5,-2,-1,0,-1,-6,1,-6,1,1,5,3)
+// □=(1,1,1,-1,1,1,-1,-1,1,1,-1,1,1,-1,-1,-1,-1,-1,0,0,0,-1,1,-1,1,1,-1)
 
 var matrix;
 var point;
@@ -76,7 +77,7 @@ function getMatrixFromArray(str) {
         var arr = res.split(",");
         if (arr.length == 1) return res;
         if (arr.length % 2 == 0) return res;
-        if (arr.length == 3 || arr.length == 9) return res;
+        if (arr.length % 3 == 0) return res;
         return undefined;
     } else if (str.match(/^\(([0-9\-\;\.]*)\)$/)) {
         // セミコロン区切りの場合は行ベクトル単位で入力
@@ -487,7 +488,7 @@ function getMatrixFromArray(str) {
         res += "" + (-1) * Math.sin(rad) + ",";
         res += "" + Math.cos(rad);
         return res;
-    } else if (str.match(/^R_x\((-?[0-9]+\.?[0-9]*)\)$/)) {
+    } else if (str.match(/^R_?x\((-?[0-9]+\.?[0-9]*)\)$/)) {
         var a = RegExp.$1;
         var res = "";
         var x, y;
@@ -503,7 +504,7 @@ function getMatrixFromArray(str) {
         res += "" + (-1) * Math.sin(rad) + ",";
         res += "" + Math.cos(rad);
         return res;
-    } else if (str.match(/^R_y\((-?[0-9]+\.?[0-9]*)\)$/)) {
+    } else if (str.match(/^R_?y\((-?[0-9]+\.?[0-9]*)\)$/)) {
         var a = RegExp.$1;
         var res = "";
         var x, y;
@@ -519,7 +520,7 @@ function getMatrixFromArray(str) {
         res += "" + 0 + ",";
         res += "" + Math.cos(rad);
         return res;
-    } else if (str.match(/^R_z\((-?[0-9]+\.?[0-9]*)\)$/)) {
+    } else if (str.match(/^R_?z\((-?[0-9]+\.?[0-9]*)\)$/)) {
         var a = RegExp.$1;
         var res = "";
         var x, y;
@@ -563,7 +564,7 @@ function multiplyMatrix(a, b) {
         }
         res = res.slice(0, res.length - 1);
         return res;
-    } else if (a.length == 9 && (b.length == 3 || b.length == 9)) {
+    } else if ((a.length % 3 == 0 && a.length % 2 != 0) && (b.length % 3 == 0 && b.length % 2 != 0)) {
         var res = "";
         for (i = 0; i < b.length; i++) {
             var n = a[i % 3] * b[Math.floor(i / 3) * 3] + a[i % 3 + 3] * b[Math.floor(i / 3) * 3 + 1] + a[i % 3 + 6] * b[Math.floor(i / 3) * 3 + 2];
@@ -571,7 +572,7 @@ function multiplyMatrix(a, b) {
         }
         res = res.slice(0, res.length - 1);
         return res;
-    } else if (a.length == 6 && (b.length == 3 || b.length == 9)) {
+    } else if (a.length == 6 && (b.length % 3 == 0 && b.length % 2 != 0)) {
         var res = "";
         for (i = 0; i < a.length * b.length / 3 / 3; i++) {
             var n = a[i % 2] * b[Math.floor(i / 2) * 3] + a[i % 2 + 2] * b[Math.floor(i / 2) * 3 + 1] + a[i % 2 + 4] * b[Math.floor(i / 2) * 3 + 2];
