@@ -2,7 +2,7 @@
 // ﾅ=(-1,1,-3,1,-3,-1,-1,-1,-1,-3,-2,-5,0,-5,1,-3,1,-1,3,-1,3,1,1,1,1,3,-1,3)
 // ←=(1,4,1,1,-1,-1,-3,-1,-3,1,-6,-2,-3,-5,-3,-3,0,-3,3,0,3,4)
 // ｲ=(5,5,-5,0,-5,-2,-1,0,-1,-6,1,-6,1,1,5,3)
-// □=(1,1,1,-1,1,1,-1,-1,1,1,-1,1,1,-1,-1,-1,-1,-1,0,0,0,-1,1,-1,1,1,-1)
+// □=(1,1,1,-1,1,1,-1,-1,1,1,-1,1,1,-1,-1,-1,-1,-1,0,0,-1,-1,1,-1,1,1,-1)
 
 var matrix;
 var point;
@@ -67,20 +67,20 @@ function getMatrixFromArray(str) {
         // スカラー 例: 12.34
         var res = RegExp.$1;
         return res;
-    } else if (str.match(/^\((\-?[0-9]+\.?[0-9]*)\,(\-?[0-9]+\.?[0-9]*)\)$/)) {
+    } else if (str.match(/^\((\-?[0-9]+\.?[0-9]*)\,(\-?[0-9]+\.?[0-9]*)\)?$/)) {
         // ベクトル 例: (1,-2,0.5,1)
         var res = RegExp.$1 + "," + RegExp.$2;
         return res;
-    } else if (str.match(/^\(([0-9\-\,\.]*)\)$/)) {
-        // 
+    } else if (str.match(/^\(([0-9\-\,\.]*)\)?$/)) {
+        // カンマ区切りの場合は列ベクトル単位で入力
         var res = RegExp.$1;
         var arr = res.split(",");
         if (arr.length == 1) return res;
         if (arr.length % 2 == 0) return res;
         if (arr.length % 3 == 0) return res;
         return undefined;
-    } else if (str.match(/^\(([0-9\-\;\.]*)\)$/)) {
-        // セミコロン区切りの場合は行ベクトル単位で入力
+    } else if (str.match(/^\(([0-9\-\;\.]*)\)?$/)) {
+        // セミコロン区切りの場合は行ベクトル単位で入力（直感的ではないが）
         var res = RegExp.$1;
         var tmpArr = res.split(";");
         var arr = new Array();
@@ -99,6 +99,7 @@ function getMatrixFromArray(str) {
         }
         return undefined;
     } else if (str.match(/^([A-Za-z])$/)) {
+        // 行列
         var a = RegExp.$1;
         mess = "" + a;
         if (defined[a] == undefined) {
@@ -107,6 +108,7 @@ function getMatrixFromArray(str) {
         }
         return matrix[defined[a]];
     } else if (str.match(/^([A-Za-z])([A-Za-z])$/)) {
+        // 行列の積
         var a = RegExp.$1;
         var b = RegExp.$2;
         mess = "" + a + b;
@@ -122,9 +124,16 @@ function getMatrixFromArray(str) {
         a = matrix[defined[a]].split(",");
         b = matrix[defined[b]].split(",");
         res = multiplyMatrix(a, b);
-        if (res == undefined) caut = "これらの行列の積を計算することはできません";
+        if (res == undefined){
+            if ((a.length == 2 && b.length == 2) || (a.length == 3 && b.length == 3)) {
+                caut = "ベクトルの内積を計算する場合は、「*」を挟んで記述してください";
+            } else {
+                caut = "これらの行列の積を計算することはできません";
+            }
+        }
         return res;
     } else if (str.match(/^([A-Za-z]+)$/)) {
+        // 行列の積(3行列以上)
         var res = "1";
         var i;
         str = RegExp.$1;
@@ -144,7 +153,8 @@ function getMatrixFromArray(str) {
             }
         }
         return res;
-    } else if (str.match(/^([A-Za-z])\^T\*([A-Za-z])$/)) {
+    } else if (str.match(/^([A-Za-z])\^T\*?([A-Za-z])$/)) {
+        // ベクトルの内積(転置を用いた記述)
         var a = RegExp.$1;
         var b = RegExp.$2;
         mess = "" + a + "<sup>T</sup>" + b;
@@ -166,6 +176,7 @@ function getMatrixFromArray(str) {
         }
         return res;
     } else if (str.match(/^([A-Za-z])\*([A-Za-z])$/)) {
+        // ベクトルの内積(*を用いた記述)
         var a = RegExp.$1;
         var b = RegExp.$2;
         mess = "" + a + "･" + b;
@@ -187,6 +198,7 @@ function getMatrixFromArray(str) {
         }
         return res;
     } else if (str.match(/^\<([A-Za-z])\,([A-Za-z])\>$/)) {
+        // ベクトルの内積(<,>を用いた記述)
         var a = RegExp.$1;
         var b = RegExp.$2;
         mess = "&lt;" + a + "," + b + "&gt;";
@@ -208,6 +220,7 @@ function getMatrixFromArray(str) {
         }
         return res;
     } else if (str.match(/^([A-Za-z])\*\*([A-Za-z])$/)) {
+        // ベクトルの外積(**を用いた記述)
         var a = RegExp.$1;
         var b = RegExp.$2;
         mess = "" + a + "×" + b;
@@ -229,6 +242,7 @@ function getMatrixFromArray(str) {
         }
         return res;
     } else if (str.match(/^\|\|([A-Za-z])\|\|$/)) {
+        // ベクトルの長さ
         var a = RegExp.$1;
         mess = "||" + a + "||";
         var i;
@@ -244,6 +258,7 @@ function getMatrixFromArray(str) {
         }
         return res;
     } else if (str.match(/^([A-Za-z])\+([A-Za-z])$/)) {
+        // 行列の和
         var a = RegExp.$1;
         var b = RegExp.$2;
         mess = "" + a + "+" + b;
@@ -270,6 +285,7 @@ function getMatrixFromArray(str) {
         res = res.slice(0, res.length - 1);
         return res;
     } else if (str.match(/^([A-Za-z])\-([A-Za-z])$/)) {
+        // 行列の差
         var a = RegExp.$1;
         var b = RegExp.$2;
         mess = "" + a + "-" + b;
@@ -296,6 +312,7 @@ function getMatrixFromArray(str) {
         res = res.slice(0, res.length - 1);
         return res;
     } else if (str.match(/^([A-Za-z])\^\-1$/)) {
+        // 逆行列
         var a = RegExp.$1;
         mess = "" + a + "<sup>-1</sup>";
         var i;
@@ -343,6 +360,7 @@ function getMatrixFromArray(str) {
         caut = "この行列の逆行列を計算することはできません";
         return undefined;
     } else if (str.match(/^([A-Za-z])\^T$/)) {
+        // 転置
         var a = RegExp.$1;
         mess = "" + a + "<sup>T</sup>";
         var i, x, y;
@@ -375,6 +393,7 @@ function getMatrixFromArray(str) {
         caut = "結果の行列が非対応な形式になるため、この行列の転置行列は計算できません";
         return undefined;
     } else if (str.match(/^([A-Za-z])\^([0-9]+)$/)) {
+        // 行列のべき乗
         var a = RegExp.$1;
         var b = RegExp.$2;
         var res = "1";
@@ -399,6 +418,7 @@ function getMatrixFromArray(str) {
         }
         return res;
     } else if (str.match(/^(\-?[0-9]+\.?[0-9]*)([A-Za-z])$/)) {
+        // 行列のスカラー倍
         var a = RegExp.$1;
         var b = RegExp.$2;
         mess = "" + str;
@@ -412,6 +432,7 @@ function getMatrixFromArray(str) {
         res = multiplyMatrix(a, b);
         return res;
     } else if (str.match(/^det\(?([A-Za-z])\)?$/)) {
+        // 行列式(detを用いた記述)
         var a = RegExp.$1;
         mess = "det(" + a + ")";
         var i;
@@ -427,6 +448,7 @@ function getMatrixFromArray(str) {
         }
         return res;
     } else if (str.match(/^\|([A-Za-z])\|$/)) {
+        // 行列式(||を用いた記述)
         var a = RegExp.$1;
         mess = "|" + a + "|";
         var i;
@@ -437,11 +459,16 @@ function getMatrixFromArray(str) {
         a = matrix[defined[a]].split(",");
         res = determinant(a);
         if (res == undefined) {
-            caut = "この行列の行列式を計算することはできません";
+            if (a.length <= 3) {
+                caut = "ベクトルの長さを計算する場合は、||〜||と記述してください";
+            } else {
+                caut = "この行列の行列式を計算することはできません";
+            }
             return undefined;
         }
         return res;
     } else if (str.match(/^([EI])_([123])$/)) {
+        // 単位行列
         var a = RegExp.$1;
         var b = RegExp.$2;
         var res = "";
@@ -455,6 +482,7 @@ function getMatrixFromArray(str) {
         res = res.slice(0, res.length - 1);
         return res;
     } else if (str.match(/^O_([123])$/)) {
+        // ゼロ行列
         var a = RegExp.$1;
         var res = "";
         var x, y;
@@ -467,6 +495,7 @@ function getMatrixFromArray(str) {
         res = res.slice(0, res.length - 1);
         return res;
     } else if (str.match(/^g_([123])$/)) {
+        // 重心ベクトル(?)
         var a = RegExp.$1;
         var res = "";
         var x, n;
@@ -477,7 +506,8 @@ function getMatrixFromArray(str) {
         }
         res = res.slice(0, res.length - 1);
         return res;
-    } else if (str.match(/^R\((-?[0-9]+\.?[0-9]*)\)$/)) {
+    } else if (str.match(/^R\((-?[0-9]+\.?[0-9]*)\)?$/)) {
+        // 回転行列
         var a = RegExp.$1;
         var res = "";
         var x, y;
@@ -488,7 +518,8 @@ function getMatrixFromArray(str) {
         res += "" + (-1) * Math.sin(rad) + ",";
         res += "" + Math.cos(rad);
         return res;
-    } else if (str.match(/^R_?x\((-?[0-9]+\.?[0-9]*)\)$/)) {
+    } else if (str.match(/^R_?x\((-?[0-9]+\.?[0-9]*)\)?$/)) {
+        // 回転行列(3次ベクトルでx軸を回転軸とする)
         var a = RegExp.$1;
         var res = "";
         var x, y;
@@ -504,7 +535,8 @@ function getMatrixFromArray(str) {
         res += "" + (-1) * Math.sin(rad) + ",";
         res += "" + Math.cos(rad);
         return res;
-    } else if (str.match(/^R_?y\((-?[0-9]+\.?[0-9]*)\)$/)) {
+    } else if (str.match(/^R_?y\((-?[0-9]+\.?[0-9]*)\)?$/)) {
+        // 回転行列(3次ベクトルでy軸を回転軸とする)
         var a = RegExp.$1;
         var res = "";
         var x, y;
@@ -520,7 +552,8 @@ function getMatrixFromArray(str) {
         res += "" + 0 + ",";
         res += "" + Math.cos(rad);
         return res;
-    } else if (str.match(/^R_?z\((-?[0-9]+\.?[0-9]*)\)$/)) {
+    } else if (str.match(/^R_?z\((-?[0-9]+\.?[0-9]*)\)?$/)) {
+        // 回転行列(3次ベクトルでz軸を回転軸とする)
         var a = RegExp.$1;
         var res = "";
         var x, y;
