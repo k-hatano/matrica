@@ -167,6 +167,69 @@ function getMatrixFromArray(str) {
             }
         }
         return res;
+    } else if (str.match(/^\[([A-Za-z](\,[A-Za-z])*)\]?$/)) {
+        // 行列の連結
+        var res = "";
+        var i;
+        var type;
+        matList = RegExp.$1.split(",");
+        mess = "";
+        var a = matList[0];
+        if (defined[a] == undefined) {
+            caut = "行列" + a + "が定義されていません";
+            return undefined;
+        }
+        var mat = matrix[defined[a]].split(",");
+        if (mat.length == 1) { // スカラー
+            type = 1;
+        } else if (mat.length % 2 == 0) { // 2×n行列
+            type = 2;
+        } else if (mat.length % 3 == 0) { // 3×n行列
+            type = 3;
+        } else { // 来ないはずだけど・・・
+            caut = "行列" + a + "の形式に対応していません";
+            return undefined;
+        }
+
+
+        for (i = 0; i < matList.length; i++) {
+            var a = matList[i];
+            if (defined[a] == undefined) {
+                caut = "行列" + a + "が定義されていません";
+                return undefined;
+            }
+            var mat = matrix[defined[a]];
+            if (type == 1 && mat.split(",").length != 1) {
+                caut = "各行列の行数が揃っていません";
+                return undefined;
+            }
+            if (type == 2 && mat.split(",").length % 2 != 0) {
+                caut = "各行列の行数が揃っていません";
+                return undefined;
+            }
+            if (type == 3 && mat.split(",").length % 3 != 0) {
+                caut = "各行列の行数が揃っていません";
+                return undefined;
+            }
+            if (res.length > 0 ){
+                res += ",";
+                mess += " ";
+            }
+            res += mat;
+            mess += a;
+        }
+
+        if (res.split(",").length % 2 == 0 && type != 2) {
+            caut = "この行列の形式に対応していません";
+            return undefined;
+        }
+        if (res.split(",").length % 3 == 0 && type != 3) {
+            caut = "この行列の形式に対応していません";
+            return undefined;
+        }
+
+        mess = "[ " + mess + " ]";
+        return res;
     } else if (str.match(/^([A-Za-z])\^T\*?([A-Za-z])$/)) {
         // ベクトルの内積(転置を用いた記述)
         var a = RegExp.$1;
