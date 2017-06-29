@@ -982,23 +982,32 @@ function drawArray(ctx, arr, alpha, vec, sq) {
         ctx.strokeStyle = "black";
         if ((arr.length == 2 && vec) || (arr.length == 4 && sq)) {
             for (var j = 0; j < arr.length; j += 2) {
-                ctx.beginPath();
-                x = cnvHalf;
-                y = cnvHalf;
-                ctx.moveTo(x, y);
-                x = cnvHalf + cnvHalf * (arr[j] / max);
-                y = cnvHalf - cnvHalf * (arr[j + 1] / max);
-                ctx.lineTo(x, y);
-                ctx.stroke();
+                if (arr[j] == 0.0 && arr[j + 1] == 0.0) {
+                    ctx.beginPath();
+                    ctx.moveTo(-5.0 + cnvHalf, -5.0 + cnvHalf);
+                    ctx.lineTo(5.0 + cnvHalf, 5.0 + cnvHalf);
+                    ctx.moveTo(-5.0 + cnvHalf, 5.0 + cnvHalf);
+                    ctx.lineTo(5.0 + cnvHalf, -5.0 + cnvHalf);
+                    ctx.stroke();
+                } else {
+                    ctx.beginPath();
+                    x = cnvHalf;
+                    y = cnvHalf;
+                    ctx.moveTo(x, y);
+                    x = cnvHalf + cnvHalf * (arr[j] / max);
+                    y = cnvHalf - cnvHalf * (arr[j + 1] / max);
+                    ctx.lineTo(x, y);
+                    ctx.stroke();
 
-                ctx.beginPath();
-                rad = Math.atan2(arr[j + 1], arr[j]) + Math.PI;
-                len = Math.sqrt(arr[j] * arr[j] + arr[j + 1] * arr[j + 1]);
-                ctx.moveTo(x, y);
-                ctx.lineTo(x + 10.0 * Math.cos(rad - Math.PI / 8), y - 10.0 * Math.sin(rad - Math.PI / 8));
-                ctx.moveTo(x, y);
-                ctx.lineTo(x + 10.0 * Math.cos(rad + Math.PI / 8), y - 10.0 * Math.sin(rad + Math.PI / 8));
-                ctx.stroke();
+                    ctx.beginPath();
+                    rad = Math.atan2(arr[j + 1], arr[j]) + Math.PI;
+                    len = Math.sqrt(arr[j] * arr[j] + arr[j + 1] * arr[j + 1]);
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(x + 10.0 * Math.cos(rad - Math.PI / 8), y - 10.0 * Math.sin(rad - Math.PI / 8));
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(x + 10.0 * Math.cos(rad + Math.PI / 8), y - 10.0 * Math.sin(rad + Math.PI / 8));
+                    ctx.stroke();
+                }
             }
         } else {
             for (var j = 0; j < arr.length; j += 2) {
@@ -1027,49 +1036,71 @@ function drawArray(ctx, arr, alpha, vec, sq) {
             ctx.fillStyle = "rgb(255, 0, 0)";
             ctx.strokeStyle = "rgb(255, 0, 0)";
             for (var j = 0; j < arr.length; j += 3) {
-                ctx.beginPath();
-                x = cnvHalf;
-                y = cnvHalf;
-                ctx.moveTo(x, y);
-                z = parseFloat(arr[j + 2] / max * 5);
-                r = Math.pow(2, arr[j + 2] / max);
-                x = cnvHalf + cnvHalf * (arr[j] / max) * r - z;
-                y = cnvHalf - cnvHalf * (arr[j + 1] / max) * r;
-                ctx.lineTo(x, y);
-                ctx.stroke();
+                if (arr[j] == 0.0 && arr[j + 1] == 0.0) {
+                    ctx.beginPath();
+                    z = parseFloat(arr[j + 2] / max * 5);
+                    r = Math.pow(2, arr[j + 2] / max);
+                    ctx.moveTo(-5.0 * r + cnvHalf - z, -5.0 * r + cnvHalf);
+                    ctx.lineTo(5.0 * r + cnvHalf - z, 5.0 * r + cnvHalf);
+                    ctx.moveTo(-5.0 * r + cnvHalf - z, 5.0 * r + cnvHalf);
+                    ctx.lineTo(5.0 * r + cnvHalf - z, -5.0 * r + cnvHalf);
+                    ctx.stroke();
+                } else {
+                    ctx.beginPath();
+                    x = cnvHalf;
+                    y = cnvHalf;
+                    ctx.moveTo(x, y);
+                    z = parseFloat(arr[j + 2] / max * 5);
+                    r = Math.pow(2, arr[j + 2] / max);
+                    x = cnvHalf + cnvHalf * (arr[j] / max) * r - z;
+                    y = cnvHalf - cnvHalf * (arr[j + 1] / max) * r;
+                    ctx.lineTo(x, y);
+                    ctx.stroke();
 
-                ctx.beginPath();
-                rad = Math.atan2(arr[j + 1], arr[j]) + Math.PI;
-                len = Math.sqrt(arr[j] * arr[j] + arr[j + 1] * arr[j + 1]);
-                ctx.moveTo(x, y);
-                ctx.lineTo(x + 10.0 * Math.cos(rad - Math.PI / 8) * r, y - 10.0 * Math.sin(rad - Math.PI / 8) * r);
-                ctx.moveTo(x, y);
-                ctx.lineTo(x + 10.0 * Math.cos(rad + Math.PI / 8) * r, y - 10.0 * Math.sin(rad + Math.PI / 8) * r);
-                ctx.stroke();
+                    ctx.beginPath();
+                    rad = Math.atan2(arr[j + 1], arr[j]) + Math.PI;
+                    len = Math.sqrt(arr[j] * arr[j] + arr[j + 1] * arr[j + 1]);
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(x + 10.0 * Math.cos(rad - Math.PI / 8) * r, y - 10.0 * Math.sin(rad - Math.PI / 8) * r);
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(x + 10.0 * Math.cos(rad + Math.PI / 8) * r, y - 10.0 * Math.sin(rad + Math.PI / 8) * r);
+                    ctx.stroke();
+                }
             }
 
             ctx.fillStyle = "rgb(0, 255, 255)";
             ctx.strokeStyle = "rgb(0, 255, 255)";
             for (var j = 0; j < arr.length; j += 3) {
-                ctx.beginPath();
-                x = cnvHalf;
-                y = cnvHalf;
-                ctx.moveTo(x, y);
-                z = parseFloat(arr[j + 2] / max * 5);
-                r = Math.pow(2, arr[j + 2] / max);
-                x = cnvHalf + cnvHalf * (arr[j] / max) * r + z;
-                y = cnvHalf - cnvHalf * (arr[j + 1] / max) * r;
-                ctx.lineTo(x, y);
-                ctx.stroke();
+                if (arr[j] == 0.0 && arr[j + 1] == 0.0) {
+                    ctx.beginPath();
+                    z = parseFloat(arr[j + 2] / max * 5);
+                    r = Math.pow(2, arr[j + 2] / max);
+                    ctx.moveTo(-5.0 * r + cnvHalf + z, -5.0 * r + cnvHalf);
+                    ctx.lineTo(5.0 * r + cnvHalf + z, 5.0 * r + cnvHalf);
+                    ctx.moveTo(-5.0 * r + cnvHalf + z, 5.0 * r + cnvHalf);
+                    ctx.lineTo(5.0 * r + cnvHalf + z, -5.0 * r + cnvHalf);
+                    ctx.stroke();
+                } else {
+                    ctx.beginPath();
+                    x = cnvHalf;
+                    y = cnvHalf;
+                    ctx.moveTo(x, y);
+                    z = parseFloat(arr[j + 2] / max * 5);
+                    r = Math.pow(2, arr[j + 2] / max);
+                    x = cnvHalf + cnvHalf * (arr[j] / max) * r + z;
+                    y = cnvHalf - cnvHalf * (arr[j + 1] / max) * r;
+                    ctx.lineTo(x, y);
+                    ctx.stroke();
 
-                ctx.beginPath();
-                rad = Math.atan2(arr[j + 1], arr[j]) + Math.PI;
-                len = Math.sqrt(arr[j] * arr[j] + arr[j + 1] * arr[j + 1]);
-                ctx.moveTo(x, y);
-                ctx.lineTo(x + 10.0 * Math.cos(rad - Math.PI / 8) * r, y - 10.0 * Math.sin(rad - Math.PI / 8) * r);
-                ctx.moveTo(x, y);
-                ctx.lineTo(x + 10.0 * Math.cos(rad + Math.PI / 8) * r, y - 10.0 * Math.sin(rad + Math.PI / 8) * r);
-                ctx.stroke();
+                    ctx.beginPath();
+                    rad = Math.atan2(arr[j + 1], arr[j]) + Math.PI;
+                    len = Math.sqrt(arr[j] * arr[j] + arr[j + 1] * arr[j + 1]);
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(x + 10.0 * Math.cos(rad - Math.PI / 8) * r, y - 10.0 * Math.sin(rad - Math.PI / 8) * r);
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(x + 10.0 * Math.cos(rad + Math.PI / 8) * r, y - 10.0 * Math.sin(rad + Math.PI / 8) * r);
+                    ctx.stroke();
+                }
             }
         } else {
             ctx.fillStyle = "rgb(255, 0, 0)";
