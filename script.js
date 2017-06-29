@@ -1,8 +1,8 @@
-// F=(-3,6,-3,-6,-1,-6,-1,-1,2,-1,2,1,-1,1,-1,4,3,4,3,6)
-// ﾅ=(-1,1,-3,1,-3,-1,-1,-1,-1,-3,-2,-5,0,-5,1,-3,1,-1,3,-1,3,1,1,1,1,3,-1,3)
-// ←=(1,4,1,1,-1,-1,-3,-1,-3,1,-6,-2,-3,-5,-3,-3,0,-3,3,0,3,4)
-// ｲ=(5,5,-5,0,-5,-2,-1,0,-1,-6,1,-6,1,1,5,3)
-// □=(1,1,1,-1,1,1,-1,-1,1,1,-1,1,1,-1,-1,-1,-1,-1,0,0,-1,-1,1,-1,1,1,-1)
+// F=[-3,6,-3,-6,-1,-6,-1,-1,2,-1,2,1,-1,1,-1,4,3,4,3,6]
+// ﾅ=[-1,1,-3,1,-3,-1,-1,-1,-1,-3,-2,-5,0,-5,1,-3,1,-1,3,-1,3,1,1,1,1,3,-1,3]
+// ←=[1,4,1,1,-1,-1,-3,-1,-3,1,-6,-2,-3,-5,-3,-3,0,-3,3,0,3,4]
+// ｲ=[5,5,-5,0,-5,-2,-1,0,-1,-6,1,-6,1,1,5,3]
+// □=[1,1,1,-1,1,1,-1,-1,1,1,-1,1,1,-1,-1,-1,-1,-1,0,0,-1,-1,1,-1,1,1,-1]
 
 var matrix;
 var point;
@@ -81,11 +81,11 @@ function getMatrixFromArray(str) {
         var res = "" + re + "," + -im + "," + (im) + "," + re;
         mess = "(" + re + "-" + im + RegExp.$3 + ")";
         return res;
-    } else if (str.match(/^\((\-?[0-9]+\.?[0-9]*)\,(\-?[0-9]+\.?[0-9]*)\)?$/)) {
-        // ベクトル 例: (1,-2,0.5,1)
+    } else if (str.match(/^\[(\-?[0-9]+\.?[0-9]*)\,(\-?[0-9]+\.?[0-9]*)\]?$/)) {
+        // ベクトル 例: [1,-2,0.5,1]
         var res = RegExp.$1 + "," + RegExp.$2;
         return res;
-    } else if (str.match(/^\(([0-9\-\,\.]*)\)?$/)) {
+    } else if (str.match(/^\[([0-9\-\,\.]*)\]?$/)) {
         // カンマ区切りの場合は列ベクトル単位で入力
         var res = RegExp.$1;
         var arr = res.split(",");
@@ -93,7 +93,7 @@ function getMatrixFromArray(str) {
         if (arr.length % 2 == 0) return res;
         if (arr.length % 3 == 0) return res;
         return undefined;
-    } else if (str.match(/^\(([0-9\-\;\.]*)\)?$/)) {
+    } else if (str.match(/^\[([0-9\-\;\.]*)\]?$/)) {
         // セミコロン区切りの場合は行ベクトル単位で入力（直感的ではないが）
         var res = RegExp.$1;
         var tmpArr = res.split(";");
@@ -211,7 +211,7 @@ function getMatrixFromArray(str) {
             return undefined;
         }
         return res;
-    } else if (str.match(/^\<([A-Za-z])\,([A-Za-z])\>$/)) {
+    } else if (str.match(/^\<([A-Za-z])\,([A-Za-z])\>?$/)) {
         // ベクトルの内積(<,>を用いた記述)
         var a = RegExp.$1;
         var b = RegExp.$2;
@@ -709,11 +709,11 @@ function getMatrixHTMLTag(str, varname, idno) {
         if (varname != undefined) {
             formulaHtml += "<td rowspan='2' nowrap='nowrap'>" + varname + " =</td>";
         }
-        formulaHtml += "<td rowspan='2' class='paren'>(</td>";
+        formulaHtml += "<td rowspan='2' class='paren'>[</td>";
         for (i = 0; i < arr.length / 2; i++) {
             formulaHtml += "<td nowrap='nowrap'>" + roundMilli(arr[i * 2]) + "</td>";
         }
-        formulaHtml += "<td rowspan='2' class='paren'>)</td>";
+        formulaHtml += "<td rowspan='2' class='paren'>]</td>";
         if (idno != undefined) {
             formulaHtml += "<td rowspan='2'><input type='button' value='削除' class='deleteButton' onclick='deleteMatrix(" + idno + ")' /></td>";
         }
@@ -733,11 +733,11 @@ function getMatrixHTMLTag(str, varname, idno) {
         if (varname != undefined) {
             formulaHtml += "<td rowspan='3' nowrap='nowrap'>" + varname + " =</td>";
         }
-        formulaHtml += "<td rowspan='3' class='paren3'>(</td>";
+        formulaHtml += "<td rowspan='3' class='paren3'>[</td>";
         for (i = 0; i < arr.length / 3; i++) {
             formulaHtml += "<td nowrap='nowrap'>" + roundMilli(arr[i * 3]) + "</td>";
         }
-        formulaHtml += "<td rowspan='3' class='paren3'>)</td>";
+        formulaHtml += "<td rowspan='3' class='paren3'>]</td>";
         if (idno != undefined) {
             formulaHtml += "<td rowspan='3'><input type='button' value='削除' class='deleteButton' onclick='deleteMatrix(" + idno + ")' /></td>";
         }
@@ -772,9 +772,9 @@ function executeFormula(str) {
         tempDiv.innerHTML = "";
         temp = "";
         drawGraph();
-        showMessage('式を入力してください 例: M=(1,-2,0.5,1) p=(1,2) q=Mp');
+        showMessage('式を入力してください 例: M=[1,-2,0.5,1] p=[1,2] q=Mp');
         return;
-    } else if (str.match(/^([A-Za-z])\=(.*)$/)) {
+    } else if (str.match(/^([A-Za-z_])\=(.*)$/)) {
         var v = RegExp.$1;
         var vo = v;
         str = RegExp.$2;
@@ -1110,7 +1110,7 @@ function graphMouseMove(e) {
     if (e.button == 2) {
         var x = Math.round((e.offsetX - cnvSize / 2) / cnvSize * max * 2);
         var y = Math.round(-(e.offsetY - cnvSize / 2) / cnvSize * max * 2);
-        executeFormula("(" + x + "," + y + ")");
+        executeFormula("[" + x + "," + y + "]");
     } else {
         if (dist >= 0) {
             var currentDist;
@@ -1143,7 +1143,7 @@ function matrixClicked(n) {
 }
 
 function textFocus() {
-    showMessage('式を入力してください 例: M=(1,-2,0.5,1) p=(1,2) q=Mp');
+    showMessage('式を入力してください 例: M=[1,-2,0.5,1] p=[1,2] q=Mp');
 }
 
 function deleteMatrix(idno) {
