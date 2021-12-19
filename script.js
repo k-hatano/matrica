@@ -85,7 +85,7 @@ function getMatrixFromArray(str) {
         mess = "(" + re + "-" + im + RegExp.$3 + ")";
         return res;
     } else if (str.match(/^\[(\-?[0-9]+\.?[0-9]*)\,(\-?[0-9]+\.?[0-9]*)\]?$/)) {
-        // ベクトル 例: [1,-2,0.5,1]
+        // ベクトル 例: [1,2]
         var res = RegExp.$1 + "," + RegExp.$2;
         return res;
     } else if (str.match(/^\[([0-9\-\,\.]*)\]?$/)) {
@@ -171,7 +171,7 @@ function getMatrixFromArray(str) {
         }
         return res;
     } else if (str.match(/^\[([A-Za-z](\,[A-Za-z])*)\]?$/)) {
-        // 行列の連結
+        // 行列の結合
         var res = "";
         var i;
         var type;
@@ -193,7 +193,6 @@ function getMatrixFromArray(str) {
             caut = "行列" + a + "の形式に対応していません";
             return undefined;
         }
-
 
         for (i = 0; i < matList.length; i++) {
             var a = matList[i];
@@ -746,6 +745,10 @@ function euclidNorm(a) {
     return undefined;
 }
 
+function escapeQuotes(str) {
+    return str.replace('\"', '').replace('\'', '');
+}
+
 function getMatrixHTMLTag(str, varname, idno) {
     var arr = str.split(",");
     var formulaHtml = "";
@@ -761,6 +764,7 @@ function getMatrixHTMLTag(str, varname, idno) {
         }
         formulaHtml += "<td nowrap='nowrap'>" + roundMilli(arr[0]) + "</td>";
         if (idno != undefined) {
+            formulaHtml += "<td><input type='button' value='再入力' class='deleteButton' onclick='reinputFormula(\"[" + escapeQuotes(str) + "]\")' /></td>";
             formulaHtml += "<td><input type='button' value='削除' class='deleteButton' onclick='deleteMatrix(" + idno + ")' /></td>";
         }
 
@@ -781,6 +785,7 @@ function getMatrixHTMLTag(str, varname, idno) {
         }
         formulaHtml += "<td rowspan='2' class='paren'>]</td>";
         if (idno != undefined) {
+            formulaHtml += "<td rowspan='2'><input type='button' value='再入力' class='deleteButton' onclick='reinputFormula(\"[" + escapeQuotes(str) + "]\")' /></td>";
             formulaHtml += "<td rowspan='2'><input type='button' value='削除' class='deleteButton' onclick='deleteMatrix(" + idno + ")' /></td>";
         }
         formulaHtml += "</tr><tr>";
@@ -805,6 +810,7 @@ function getMatrixHTMLTag(str, varname, idno) {
         }
         formulaHtml += "<td rowspan='3' class='paren3'>]</td>";
         if (idno != undefined) {
+            formulaHtml += "<td rowspan='3'><input type='button' value='再入力' class='deleteButton' onclick='reinputFormula(\"[" + escapeQuotes(str) + "]\")' /></td>";
             formulaHtml += "<td rowspan='3'><input type='button' value='削除' class='deleteButton' onclick='deleteMatrix(" + idno + ")' /></td>";
         }
         formulaHtml += "</tr><tr>";
@@ -898,6 +904,12 @@ function executeFormula(str) {
 
     if (caut == undefined) showCaution("式に誤りがあるか、式に対応していません");
     else showCaution(caut);
+}
+
+function reinputFormula(str) {
+    var textInput = document.getElementById("input");
+    textInput.value = str;
+    inputFormula();
 }
 
 function inputFormula() {
@@ -1183,7 +1195,7 @@ function graphMouseDown(e) {
     if (e.button == 2) {
         var x = Math.round((e.offsetX - cnvSize / 2) / cnvSize * max * 2);
         var y = Math.round(-(e.offsetY - cnvSize / 2) / cnvSize * max * 2);
-        executeFormula("(" + x + "," + y + ")");
+        executeFormula("[" + x + "," + y + "]");
     } else {
         var graph = document.getElementById('graph');
         var x = e.offsetX - cnvSize / 2;
