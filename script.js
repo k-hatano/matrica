@@ -95,6 +95,7 @@ function getMatrixFromArray(str) {
         if (arr.length == 1) return res;
         if (arr.length % 2 == 0) return res;
         if (arr.length % 3 == 0) return res;
+        caut = "定義可能な行列の要素数は2か3の倍数、もしくは1のみです。";
         return undefined;
     } else if (str.match(/^\[([0-9\-\;\.]*)\]?$/)) {
         // セミコロン区切りの場合は行ベクトル単位で入力（直感的ではないが）
@@ -114,6 +115,7 @@ function getMatrixFromArray(str) {
             }
             return arr.join(",");
         }
+        caut = "定義可能な行列の要素数は2か3の倍数、もしくは1のみです。";
         return undefined;
     } else if (str.match(/^([A-Za-z])$/)) {
         // 行列
